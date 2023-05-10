@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+</head>
+<body>
+Hello
+
+<a href="/goodbye">Say goodbye</a> or <a href="/hello?name=Petr&surname=Ivanov">Request with parameters</a>
+or <a href="/exit">Exit</a>
+
+<br>
+<br>
+<a href="/calc?a=10&b=5&action=multiplication">10*5=</a> <br>
+<a href="/calc?a=10&b=5&action=addition">10+5=</a> <br>
+<a href="/calc?a=10&b=5&action=subtraction">10-5=</a> <br>
+<a href="/calc?a=11&b=5&action=division">11/5=</a>
+
+<p th:text="${message}"></p>
+
+</body>
+</html>
