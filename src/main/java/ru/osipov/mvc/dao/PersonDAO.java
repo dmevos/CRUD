@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.osipov.mvc.models.Person;
 
+import java.sql.Types;
 import java.util.List;
 
 @Component
@@ -23,8 +24,9 @@ public class PersonDAO {
     }
 
     public Person show(int id) {
+        int[] argTypes = {Types.INTEGER};
         return jdbcTemplate.query("SELECT * FROM Person WHERE id=?",
-                        new Object[]{id},
+                        new Object[]{id}, argTypes,
                         new BeanPropertyRowMapper<>(Person.class)).
                 stream().findAny().orElse(null);
 
