@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PersonDAO {
@@ -27,6 +28,13 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
     }
 
+    public Optional<Person> show(String email) {
+        int[] argTypes = {Types.VARCHAR};
+        return jdbcTemplate.query("SELECT * FROM Person WHERE email=?",
+                new Object[]{email}, argTypes,
+                new BeanPropertyRowMapper<>(Person.class)).stream().findAny();
+    }
+
     public Person show(int id) {
         int[] argTypes = {Types.INTEGER};
         return jdbcTemplate.query("SELECT * FROM Person WHERE id=?",
@@ -37,14 +45,19 @@ public class PersonDAO {
     }
 
     public void save(Person person) {
-        jdbcTemplate.update("INSERT INTO Person(name, age, email) VALUES (?,?,?)", person.getName(), person.getAge(), person.getEmail());
+        jdbcTemplate.update("INSERT INTO Person(name, age, email, address) VALUES (?,?,?,?)",
+                person.getName(),
+                person.getAge(),
+                person.getEmail(),
+                person.getAddress());
     }
 
     public void update(int id, Person updatedPerson) {
-        jdbcTemplate.update("UPDATE Person SET name=?, age=?, email=? WHERE id=?",
+        jdbcTemplate.update("UPDATE Person SET name=?, age=?, email=?, address=? WHERE id=?",
                 updatedPerson.getName(),
                 updatedPerson.getAge(),
                 updatedPerson.getEmail(),
+                updatedPerson.getAddress(),
                 id);
     }
 
@@ -66,7 +79,7 @@ public class PersonDAO {
         System.out.println("Time: " + (after - before));
     }
 
-    public void testBatchUpdate(){
+    public void testBatchUpdate() {
         List<Person> people = create1000people();
         long before = System.currentTimeMillis();
 
@@ -95,7 +108,7 @@ public class PersonDAO {
         List<Person> people = new ArrayList<>();
 
         for (int i = 0; i < 1000; i++) {
-            people.add(new Person(i, "Name_" + i, 30, "test" + i + "@mail.ru"));
+            people.add(new Person(i, "Name_" + i, 30, "test" + i + "@mail.ru", "some address"));
         }
         return people;
     }
